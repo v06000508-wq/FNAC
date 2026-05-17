@@ -1,0 +1,194 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_x8d2v"]
+[ext_resource type="Texture2D" path="res://assets/textures/чепикдляменю.png" id="2_chepik"]
+[ext_resource type="AudioStream" path="res://assets/sounds/The Office Gaze.mp3" id="3_bgm"]
+
+[sub_resource type="SystemFont" id="SystemFont_mono"]
+font_names = PackedStringArray("Courier New", "Consolas", "Monospace")
+
+[sub_resource type="Shader" id="Shader_static"]
+code = "shader_type canvas_item;
+float random(vec2 co) {
+    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}
+void fragment() {
+    float n = random(UV + vec2(TIME * 8.0, TIME * 3.0));
+    COLOR = vec4(vec3(n), 0.12);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_static"]
+shader = SubResource("Shader_static")
+
+[sub_resource type="Shader" id="Shader_grayscale"]
+code = "shader_type canvas_item;
+void fragment() {
+    vec4 tex = texture(TEXTURE, UV);
+    // Преобразование в черно-белый формат по стандарту Rec. 709
+    float gray = dot(tex.rgb, vec3(0.2126, 0.7152, 0.0722));
+    COLOR = vec4(vec3(gray), tex.a);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_grayscale"]
+shader = SubResource("Shader_grayscale")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mono"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x8d2v")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CharacterImage" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_grayscale")
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -850.0
+offset_top = 60.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("2_chepik")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StaticNoise" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_static")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ContentContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = 60.0
+offset_right = 600.0
+offset_bottom = -60.0
+grow_vertical = 2
+theme_override_constants/separation = 80
+alignment = 0
+
+[node name="TitleLabel" type="Label" parent="ContentContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_mono")
+theme_override_font_sizes/font_size = 56
+text = "Пять
+ночей
+с чепиком"
+
+[node name="MenuButtons" type="VBoxContainer" parent="ContentContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="StartButton" type="Button" parent="ContentContainer/MenuButtons"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = SubResource("SystemFont_mono")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mono")
+text = "Начать"
+flat = true
+alignment = 0
+
+[node name="NewGameButton" type="Button" parent="ContentContainer/MenuButtons"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = SubResource("SystemFont_mono")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mono")
+text = "Новая игра"
+flat = true
+alignment = 0
+
+[node name="ExitButton" type="Button" parent="ContentContainer/MenuButtons"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = SubResource("SystemFont_mono")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_mono")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mono")
+text = "Выход"
+flat = true
+alignment = 0
+
+[node name="VersionLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -45.0
+offset_right = 130.0
+offset_bottom = -20.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_fonts/font = SubResource("SystemFont_mono")
+theme_override_font_sizes/font_size = 16
+text = "v 1.1.1"
+
+[node name="CopyrightLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -45.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_fonts/font = SubResource("SystemFont_mono")
+theme_override_font_sizes/font_size = 16
+text = "© 2026 VladSamsungGames"
+horizontal_alignment = 2
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_bgm")
+autoplay = true

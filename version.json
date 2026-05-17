@@ -1,6 +1,6 @@
 {
-  "version_code": 2,
-  "version_name": "1.1.0",
-  "apk_url": "https://github.com/v06000508-wq/FNAC/releases/download/v1.1.0/fnac.apk",
-  "changelog": "- Добавлен новый жуткий видео-скример Чепика!\n- В главное меню добавлена загадочная кнопка Экстра.\n- Полная оптимизация автообновления игры."
+  "version_code": 3,
+  "version_name": "1.1.1",
+  "apk_url": "https://github.com/v06000508-wq/FNAC/releases/download/v1.1.1/fnac.apk",
+  "changelog": "- Добавлена новая интерактивная кнопка Справки в меню!\n- Текст версии обновлен до v1.1.1."
 }
