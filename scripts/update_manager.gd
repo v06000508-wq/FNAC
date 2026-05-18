@@ -1,7 +1,8 @@
 extends Node
 
-# Версия игры для ПК (для Android версия определяется автоматически через JNI)
-const DEFAULT_VERSION_CODE: int = 1
+# Текущая версия игры (меняй эти параметры при выпуске нового обновления!)
+const CURRENT_VERSION_CODE: int = 3
+const CURRENT_VERSION_NAME: String = "1.1.1"
 const VERSION_JSON_URL: String = "https://raw.githubusercontent.com/v06000508-wq/FNAC/main/version.json"
 
 @onready var http_request: HTTPRequest = HTTPRequest.new()
@@ -78,8 +79,7 @@ func _on_version_check_completed(result: int, response_code: int, headers: Packe
 	# Закрываем окно ожидания, если оно было
 	_close_status_popup()
 	
-	var local_version_code = get_local_version_code()
-	if server_version_code > local_version_code:
+	if server_version_code > CURRENT_VERSION_CODE:
 		print("[UpdateManager] Доступно обновление: ", server_version_name)
 		update_available.emit(changelog, server_version_name)
 		_show_update_modal(server_version_name, changelog)
@@ -418,40 +418,4 @@ func _run_fallback_web_install() -> void:
 		update_overlay.queue_free()
 	update_overlay = null
 
-# Получение текущего кода версии приложения (для Android через JNI, для ПК из DEFAULT_VERSION_CODE)
-func get_local_version_code() -> int:
-	var code = DEFAULT_VERSION_CODE
-	if OS.get_name() == "Android":
-		if Engine.has_singleton("GodotAndroid"):
-			var godot_android = Engine.get_singleton("GodotAndroid")
-			if godot_android:
-				var activity = godot_android.get_activity()
-				if activity:
-					var context = activity.getApplicationContext()
-					if context:
-						var manager = context.getPackageManager()
-						if manager:
-							var info = manager.getPackageInfo(context.getPackageName(), 0)
-							if info:
-								code = info.versionCode
-								print("[UpdateManager] Получен код версии из Android: ", code)
-	return code
 
-# Получение текущего названия версии приложения (для Android через JNI)
-func get_local_version_name() -> String:
-	var vname = "1.0.0"
-	if OS.get_name() == "Android":
-		if Engine.has_singleton("GodotAndroid"):
-			var godot_android = Engine.get_singleton("GodotAndroid")
-			if godot_android:
-				var activity = godot_android.get_activity()
-				if activity:
-					var context = activity.getApplicationContext()
-					if context:
-						var manager = context.getPackageManager()
-						if manager:
-							var info = manager.getPackageInfo(context.getPackageName(), 0)
-							if info:
-								vname = info.versionName
-								print("[UpdateManager] Получено название версии из Android: ", vname)
-	return vname
