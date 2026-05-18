@@ -270,14 +270,14 @@ func _show_update_modal(version_name: String, changelog: String) -> void:
 	btn_row.add_child(cancel_btn)
 
 func _on_download_pressed() -> void:
-	download_btn.visible = false
-	cancel_btn.visible = false
-	progress_bar.visible = true
-	status_label.text = "Подключение к серверу и скачивание..."
-	status_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2))
+	# Сразу открываем прямую ссылку на скачивание APK в системном мобильном браузере
+	# Смартфон сам скачает и предложит обновить игру напрямую
+	OS.shell_open(apk_download_url)
 	
-	# Начинаем скачивание
-	start_downloading_apk()
+	# Закрываем оверлей обновления
+	if update_overlay and is_instance_valid(update_overlay):
+		update_overlay.queue_free()
+	update_overlay = null
 
 func _on_cancel_pressed() -> void:
 	if update_overlay and is_instance_valid(update_overlay):
