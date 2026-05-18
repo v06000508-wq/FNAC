@@ -376,8 +376,8 @@ func install_apk() -> void:
 					if intent_class and file_class and file_provider_class:
 						var apk_file = file_class.new(absolute_path)
 						
-						# В Godot 4 стандартный FileProvider имеет суффикс .godot.fileprovider
-						var provider_authority = context.getPackageName() + ".godot.fileprovider"
+						# В Godot 4 стандартный FileProvider имеет суффикс .fileprovider
+						var provider_authority = context.getPackageName() + ".fileprovider"
 						print("[UpdateManager] Используем FileProvider authority: ", provider_authority)
 						
 						var apk_uri = file_provider_class.getUriForFile(context, provider_authority, apk_file)
